@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Story Generator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/base.css') }}">
+</head>
+<body>
+    <p>
+        <div class="wrapper">
+        <button class="button" id="startRecording">Start recording</button>
+        <button id="stopRecording" disabled>Stop recording</button>
+        </div>
+    </p>
+</body>
+
+<script>
+
+</script>
+<script>
+    navigator
+        .mediaDevices
+        .getUserMedia({audio: true})
+        .then(stream => { handlerFunction(stream) });
+
+    function handlerFunction(stream) {
+        rec = new MediaRecorder(stream);
+        rec.ondataavailable = e => {
+            audioChunks.push(e.data);
+            if (rec.state == "inactive") {
+                let blob = new Blob(audioChunks, {type: 'audio/mpeg-3'});
+                sendData(blob);
+            }
+        }
+    }
+
+    function sendData(data) {
+        var form = new FormData();
+        form.append('file', data, 'data.mp3');
+        form.append('title', 'data.mp3');
+        
+        $.ajax({
+            type: 'POST',
+            url: '/save-record',
+            data: form,
+            cache: false,
+            processData: false,
+            contentType: false
+        }).done(function(data) {
+            console.log(data);
+        });
+    }
+
+    startRecording.onclick = e => {
+        startRecording.disabled = true;
+        stopRecording.disabled = false;
+        audioChunks = [];
+        rec.start();
+        const myTimeout = setTimeout(recordingstop, 3000);
+    };
+
+    
+    function recordingstop(e){
+        startRecording.disabled = false;
+        stopRecording.disabled = true;
+        rec.stop();
+        const mytime = setTimeout(redirect,4000)
+
+    }
+    function redirect() {
+        document.getElementById("savingUserStory").click();
+     } 
+    
+</script>
+
+<form action="#" method = "post">
+<div class="container">
+    <textarea rows="20" class="form-control" placeholder="Save the story before starting recording to get better results" id="message" name ="story" >{{storydata}}</textarea>
+    <button type="submit" id="savingUserStory" class="save-btn">Save</button>
+</div>
+</form>
+
+</html>

@@ -1,0 +1,42 @@
+.wrapper {
+    text-align: center; 
+}
+
+.button {
+    position: absolute;
+    top: 10%;
+    background-color:peru;
+    color: black;
+    text-align: center;
+    font-size: 13px;
+}
+
+.save-btn{
+    position:absolute; 
+    margin-left:-50px;
+    left:50%;
+    width:100px;
+    bottom:160px;
+ }
+
+body{
+    background-color: darkslategray;
+}
+
+textarea{
+    width: 600px;
+    height: 300px;  
+    padding: 50px;
+    border: 1px solid red;
+    color: rgb(3, 14, 10);
+    font-size: large;
+    font-family:serif;
+    background-color: rgb(162, 233, 209);
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+  }
